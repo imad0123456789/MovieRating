@@ -62,5 +62,12 @@ namespace XUnitTestProject
             Assert.Equal(expectedResult, result);
             mockRepository.Verify(r => r.GetAll(), Times.Once);
         }
+
+        public void GetAverageRateFromReviewer()
+        {
+            //Arrange
+            //Act
+            //Assert
+        }
     }
 }
