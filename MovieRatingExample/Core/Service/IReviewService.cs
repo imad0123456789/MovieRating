@@ -12,7 +12,7 @@ namespace MovieRatingExample.Core.Service
         int GetNumberOfReviewsFromReviewer(int reviewer);
         
         //2. On input N, what is the average rate that reviewer N had given?
-        double GetAverageRateFromReviewer(int reviewer);
+        int GetAverageRateFromReviewer(int reviewer);
 
         //3. On input N and R, how many times has reviewer N given rate R?
         int GetNumberOfRatesByReviewer(int reviewer, int rate);

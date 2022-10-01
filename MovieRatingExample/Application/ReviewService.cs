@@ -22,7 +22,7 @@ namespace MovieRatingExample.Application
             Repository = repository;
         }
 
-        public double GetAverageRateFromReviewer(int reviewer)
+        public int GetAverageRateFromReviewer(int reviewer)
         {
             throw new NotImplementedException();
         }

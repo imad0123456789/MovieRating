@@ -1,3 +1,4 @@
+using Castle.Components.DictionaryAdapter;
 using Moq;
 using MovieRatingExample.Application;
 using MovieRatingExample.Core.Model;
@@ -63,11 +64,32 @@ namespace XUnitTestProject
             mockRepository.Verify(r => r.GetAll(), Times.Once);
         }
 
-        public void GetAverageRateFromReviewer()
+        public void GetAverageRateFromReviewer(int reviewer, Double expResult)
         {
-            //Arrange
-            //Act
-            //Assert
+            
+            //
+            List<BEReview> beReviews = new EditableList<BEReview>();
+            
+            
+            // Arrange
+            BEReview[] fakeRepo = new BEReview[]
+            {
+                new BEReview() {Reviewer = 1, Movie = 1, Grade=3, ReviewDate = new DateTime()},
+                new BEReview() {Reviewer = 2, Movie = 1, Grade=3, ReviewDate = new DateTime()},
+                new BEReview() {Reviewer = 1, Movie = 2, Grade=3, ReviewDate = new DateTime()},
+            };
+
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            mockRepository.Setup(r => r.GetAll()).Returns(fakeRepo);
+
+            IReviewService service = new ReviewService(mockRepository.Object);
+
+            // Act
+            int result = service.GetAverageRateFromReviewer(reviewer);
+
+            // Assert
+            Assert.Equal(expResult, result);
+            mockRepository.Verify(r => r.GetAll(), Times.Once);
         }
     }
 }
