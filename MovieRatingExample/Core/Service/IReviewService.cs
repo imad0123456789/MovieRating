@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieRatingExample.Core.Model;
 
 namespace MovieRatingExample.Core.Service
 {
     public interface IReviewService
     {
+        
+        BEReview[] GetAll();
+        
         //1. On input N, what are the number of reviews from reviewer N?
         int GetNumberOfReviewsFromReviewer(int reviewer);
         
