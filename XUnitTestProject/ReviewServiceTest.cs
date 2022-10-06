@@ -409,16 +409,17 @@ namespace XUnitTestProject
             BEReview review02 = new BEReview();
             BEReview review03 = new BEReview();
             
-            review01.Grade = 1;
+            review01.Grade = 5;
             review02.Grade = 3;
-            review03.Grade = 5;
+            review03.Grade = 1;
 
             review01.Movie = 1;
-            review02.Movie = 1;
-            review03.Movie = 1;
+            review02.Movie = 2;
+            review03.Movie = 3;
             
             review01.Reviewer = 1;
-            review02.Reviewer = 2;
+            review02.Reviewer = 1;
+            review03.Reviewer = 1;
 
             List<BEReview> reviews = new List<BEReview>();
             
@@ -432,15 +433,16 @@ namespace XUnitTestProject
             IReviewService service = new ReviewService(repository);
             
             //Act
-            List<int> result = service.GetTopMoviesByReviewer(0);
+            List<int> result = service.GetTopMoviesByReviewer(1);
             
             //Assert
             
-            var list = new List<int> { 42, 2112 };
+            
 
-            Assert.Collection(list,
-                item => Assert.Equal(2112, item),
-                item => Assert.Equal(42, item)
+            Assert.Collection(result,
+                item => Assert.Equal(1, item),
+                item => Assert.Equal(2, item),
+                item => Assert.Equal(3, item)
             );
             //Assert.Equal(2,result.Count);
             //Assert.Collection();
@@ -482,7 +484,11 @@ namespace XUnitTestProject
             List<int> result = service.GetReviewersByMovie(1);
             
             //Assert
-            Assert.Equal(2,result.Count);
+            Assert.Collection(result,
+                item => Assert.Equal(1, item),
+                item => Assert.Equal(2, item),
+                item => Assert.Equal(3, item)
+            );
             mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
     }

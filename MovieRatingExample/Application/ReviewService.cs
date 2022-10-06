@@ -208,60 +208,46 @@ namespace MovieRatingExample.Application
         {
             if (Repository.GetAll().Length == 0)
                 throw new ArgumentException();
-            List<int> ReviewersByMovie = new List<int>();
-            int Reviewer = 0;
-           
+            List<BEReview> reviews = new List<BEReview>();
+            List<int> topReviewersByMovie = new List<int>();
+
             foreach (BEReview review in Repository.GetAll())
             {
-                if (review.Reviewer == Reviewer)
+                if (review.Movie == movie)
                 {
-                    if (review.Movie == movie)
-                    {
-                        ReviewersByMovie.Add(review.Reviewer);
-                    }
+                    reviews.Add(review);
                 }
             }
-            //ReviewersByMovie.OrderByDescending()
-            return ReviewersByMovie;
+
+            reviews.OrderByDescending(review => review.Grade).ThenBy(review => review.ReviewDate);
+            foreach (BEReview review in reviews)
+            {
+                topReviewersByMovie.Add(review.Reviewer);
+            }
+            return topReviewersByMovie;
         }
 
         public List<int> GetTopMoviesByReviewer(int reviewer)
         {
             if (Repository.GetAll().Length == 0)
                 throw new ArgumentException();
-            List<BEReview> Reviews = new List<BEReview>();
-            int sortedGrade = 5;
-            List<BEReview> SortedReviews = new List<BEReview>();
-            List<int> TopMoviesByReviewer = new List<int>();
+            List<BEReview> reviews = new List<BEReview>();
+            List<int> topMoviesByReviewer = new List<int>();
 
             foreach (BEReview review in Repository.GetAll())
             {
                 if (review.Reviewer == reviewer)
                 {
-                    Reviews.Add(review);
-                    TopMoviesByReviewer.Add(review.Movie);
+                    reviews.Add(review);
                 }
             }
 
-            Reviews.OrderByDescending(review => review.Grade).ThenBy(review => review.ReviewDate);
-            foreach (BEReview review in Reviews)
+            reviews.OrderByDescending(review => review.Grade).ThenBy(review => review.ReviewDate);
+            foreach (BEReview review in reviews)
             {
-                if (review.Grade == sortedGrade)
-                {
-                    SortedReviews.Add(review);
-                }
-                else if (review.Grade != sortedGrade)
-                {
-                    SortedReviews.OrderByDescending(review => review.ReviewDate);
-                    foreach (BEReview reviews in SortedReviews)
-                        //preguntar si funciona
-                    {
-                        TopMoviesByReviewer.Add(reviews.Movie);
-                    }
-                }
-                
+                topMoviesByReviewer.Add(review.Movie);
             }
-            return TopMoviesByReviewer;
+            return topMoviesByReviewer;
         }
 
         public List<int> GetTopRatedMovies(int amount)
