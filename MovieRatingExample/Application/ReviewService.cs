@@ -96,12 +96,50 @@ namespace MovieRatingExample.Application
         
         public List<int> GetMostProductiveReviewers()
         {
-            throw new NotImplementedException();
+            if (Repository.GetAll().Length == 0)
+                throw new ArgumentException();
+            int ReviewCount = 0;
+            int MaxAmountOfReview = 0;
+            List<int> MostProductiveReviewers = new List<int>();
+            int Reviewer = 0;
+           
+            foreach (BEReview review in Repository.GetAll())
+            {
+                if (review.Reviewer == Reviewer)
+                {
+                    ReviewCount++;
+                    if (MaxAmountOfReview == ReviewCount)
+                    {
+                       MostProductiveReviewers.Add(review.Reviewer);
+                    }
+                    else if (MaxAmountOfReview < ReviewCount)
+                    {
+                        MostProductiveReviewers.Clear();
+                        MostProductiveReviewers.Add(review.Reviewer);
+                    }
+                }
+            }
+            return MostProductiveReviewers;
         }
 
         public List<int> GetMoviesWithHighestNumberOfTopRates()
         {
-            throw new NotImplementedException();
+            if (Repository.GetAll().Length == 0)
+                throw new ArgumentException();
+            List<int> MoviesWithHighestNumberOfTopRates = new List<int>();
+            int Reviewer = 0;
+           
+            foreach (BEReview review in Repository.GetAll())
+            {
+                if (review.Reviewer == Reviewer)
+                {
+                    if (review.Grade == 5)
+                    {
+                        MoviesWithHighestNumberOfTopRates.Add(review.Movie);
+                    }
+                }
+            }
+            return MoviesWithHighestNumberOfTopRates;
         }
 
         public int GetNumberOfRates(int movie, int rate)
@@ -153,17 +191,87 @@ namespace MovieRatingExample.Application
 
         public List<int> GetReviewersByMovie(int movie)
         {
-            throw new NotImplementedException();
+            if (Repository.GetAll().Length == 0)
+                throw new ArgumentException();
+            List<int> ReviewersByMovie = new List<int>();
+            int Reviewer = 0;
+           
+            foreach (BEReview review in Repository.GetAll())
+            {
+                if (review.Reviewer == Reviewer)
+                {
+                    if (review.Movie == movie)
+                    {
+                        ReviewersByMovie.Add(review.Reviewer);
+                    }
+                }
+            }
+            //ReviewersByMovie.OrderByDescending()
+            return ReviewersByMovie;
         }
 
         public List<int> GetTopMoviesByReviewer(int reviewer)
         {
-            throw new NotImplementedException();
+            if (Repository.GetAll().Length == 0)
+                throw new ArgumentException();
+            List<BEReview> Reviews = new List<BEReview>();
+            int sortedGrade = 5;
+            List<BEReview> SortedReviews = new List<BEReview>();
+            List<int> TopMoviesByReviewer = new List<int>();
+
+            foreach (BEReview review in Repository.GetAll())
+            {
+                if (review.Reviewer == reviewer)
+                {
+                    Reviews.Add(review);
+                    TopMoviesByReviewer.Add(review.Movie);
+                }
+            }
+
+            Reviews.OrderByDescending(review => review.ReviewDate);
+            foreach (BEReview review in Reviews)
+            {
+                if (review.Grade == sortedGrade)
+                {
+                    SortedReviews.Add(review);
+                }
+                else if (review.Grade != sortedGrade)
+                {
+                    SortedReviews.OrderByDescending(review => review.ReviewDate);
+                    foreach (BEReview reviews in SortedReviews)
+                        //preguntar si funciona
+                    {
+                        TopMoviesByReviewer.Add(reviews.Movie);
+                    }
+                }
+                
+            }
+            return TopMoviesByReviewer;
         }
 
         public List<int> GetTopRatedMovies(int amount)
         {
-            throw new NotImplementedException();
+            if (Repository.GetAll().Length == 0)
+                throw new ArgumentException();
+            List<BEReview> sortedReviews = new List<BEReview>();
+            List<int> TopRatedMovies = new List<int>();
+            int Count = 0;
+           
+            foreach (BEReview review in Repository.GetAll())
+            {
+                sortedReviews.Add(review);
+            }
+
+            sortedReviews.OrderByDescending(review => review.Grade);
+            foreach (BEReview reviews in sortedReviews)
+            {
+                if (Count >= amount)
+                {
+                    TopRatedMovies.Add(reviews.Movie);
+                }
+                
+            }
+            return TopRatedMovies;
         }
     }
 }

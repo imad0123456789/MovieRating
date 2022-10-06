@@ -229,7 +229,7 @@ namespace XUnitTestProject
             review03.Grade = num03;
 
             review01.Movie = 1;
-            review02.Movie = 1 ;
+            review02.Movie = 1;
             review03.Movie = 1;
          
             List<BEReview> reviews = new List<BEReview>();
@@ -285,9 +285,182 @@ namespace XUnitTestProject
             
             //Assert
             Assert.Equal(1, result);
-            mockRepository.Verify((r) => r.GetAll(), Times.Once());
+            mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
-        
+        [Fact]
+        public void GetMoviesWithHighestNumberOfTopRates()
+        {
+            //Arrange
+
+            BEReview review01 = new BEReview();
+            BEReview review02 = new BEReview();
+            BEReview review03 = new BEReview();
+            BEReview review04 = new BEReview();
+            
+            review01.Grade = 1;
+            review02.Grade = 3;
+            review03.Grade = 5;
+            review04.Grade = 5;
+
+            review01.Movie = 1;
+            review02.Movie = 1;
+            review03.Movie = 1;
+            review04.Movie = 2;
+         
+            List<BEReview> reviews = new List<BEReview>();
+            
+            reviews.Add(review01);
+            reviews.Add(review02);
+            reviews.Add(review03);
+            reviews.Add(review04);
+            
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            IReviewRepository repository = mockRepository.Object;
+            mockRepository.Setup(r => r.GetAll()).Returns(() => reviews.ToArray());
+            IReviewService service = new ReviewService(repository);
+            
+            //Act
+            List<int> result = service.GetMoviesWithHighestNumberOfTopRates();
+            
+            //Assert
+            Assert.Equal(2,result.Count);
+        }
+        [Fact]
+        public void GetMostProductiveReviewers()
+        {
+            //Arrange
+
+            BEReview review01 = new BEReview();
+            BEReview review02 = new BEReview();
+            BEReview review03 = new BEReview();
+            
+            review01.Grade = 1;
+            review02.Grade = 3;
+            review03.Grade = 5;
+
+            review01.Movie = 1;
+            review02.Movie = 1;
+            review03.Movie = 1;
+
+            List<BEReview> reviews = new List<BEReview>();
+            
+            reviews.Add(review01);
+            reviews.Add(review02);
+            reviews.Add(review03);
+            
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            IReviewRepository repository = mockRepository.Object;
+            mockRepository.Setup(r => r.GetAll()).Returns(() => reviews.ToArray());
+            IReviewService service = new ReviewService(repository);
+            
+            //Act
+            List<int> result = service.GetMostProductiveReviewers();
+            
+            //Assert
+            Assert.Equal(2,result.Count);
+        }
+        [Fact]
+        public void GetTopRatedMovies()
+        {
+            //Arrange
+
+            BEReview review01 = new BEReview();
+            BEReview review02 = new BEReview();
+            BEReview review03 = new BEReview();
+            
+            review01.Grade = 1;
+            review02.Grade = 3;
+            review03.Grade = 5;
+
+            review01.Movie = 1;
+            review02.Movie = 1;
+            review03.Movie = 1;
+
+            List<BEReview> reviews = new List<BEReview>();
+            
+            reviews.Add(review01);
+            reviews.Add(review02);
+            reviews.Add(review03);
+            
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            IReviewRepository repository = mockRepository.Object;
+            mockRepository.Setup(r => r.GetAll()).Returns(() => reviews.ToArray());
+            IReviewService service = new ReviewService(repository);
+            
+            //Act
+            List<int> result = service.GetTopRatedMovies(3);
+            
+            //Assert
+            Assert.Equal(2,result.Count);
+        }
+        [Fact]
+        public void GetTopMoviesByReviewer()
+        {
+            //Arrange
+
+            BEReview review01 = new BEReview();
+            BEReview review02 = new BEReview();
+            BEReview review03 = new BEReview();
+            
+            review01.Grade = 1;
+            review02.Grade = 3;
+            review03.Grade = 5;
+
+            review01.Movie = 1;
+            review02.Movie = 1;
+            review03.Movie = 1;
+
+            List<BEReview> reviews = new List<BEReview>();
+            
+            reviews.Add(review01);
+            reviews.Add(review02);
+            reviews.Add(review03);
+
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            IReviewRepository repository = mockRepository.Object;
+            mockRepository.Setup(r => r.GetAll()).Returns(() => reviews.ToArray());
+            IReviewService service = new ReviewService(repository);
+            
+            //Act
+            List<int> result = service.GetTopMoviesByReviewer(1);
+            
+            //Assert
+            Assert.Equal(2,result.Count);
+        }
+        [Fact]
+        public void GetReviewersByMovie()
+        {
+            //Arrange
+
+            BEReview review01 = new BEReview();
+            BEReview review02 = new BEReview();
+            BEReview review03 = new BEReview();
+
+            review01.Grade = 1;
+            review02.Grade = 3;
+            review03.Grade = 5;
+
+            review01.Movie = 1;
+            review02.Movie = 1;
+            review03.Movie = 1;
+
+            List<BEReview> reviews = new List<BEReview>();
+            
+            reviews.Add(review01);
+            reviews.Add(review02);
+            reviews.Add(review03);
+            
+            Mock<IReviewRepository> mockRepository = new Mock<IReviewRepository>();
+            IReviewRepository repository = mockRepository.Object;
+            mockRepository.Setup(r => r.GetAll()).Returns(() => reviews.ToArray());
+            IReviewService service = new ReviewService(repository);
+            
+            //Act
+            List<int> result = service.GetReviewersByMovie(1);
+            
+            //Assert
+            Assert.Equal(2,result.Count);
+        }
     }
 }
 
