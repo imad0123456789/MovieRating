@@ -4,6 +4,7 @@ using MovieRatingExample.Core.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -98,28 +99,42 @@ namespace MovieRatingExample.Application
         {
             if (Repository.GetAll().Length == 0)
                 throw new ArgumentException();
-            int ReviewCount = 0;
-            int MaxAmountOfReview = 0;
-            List<int> MostProductiveReviewers = new List<int>();
-            int Reviewer = 0;
+            List<BEReview> allReviewers = new List<BEReview>();
+            int reviewer = 0;
+            int count = 0;
+            int maxCount = 0;
+            
+            List<int> mostProductiveReviewers = new List<int>();
            
             foreach (BEReview review in Repository.GetAll())
             {
-                if (review.Reviewer == Reviewer)
+                allReviewers.Add(review);
+                allReviewers.OrderByDescending(beReview => review.Reviewer);
+            }
+
+            foreach (BEReview review in allReviewers)
+            {
+                if (review.Reviewer == reviewer)
                 {
-                    ReviewCount++;
-                    if (MaxAmountOfReview == ReviewCount)
+                    count++;
+                    if (count == maxCount)
                     {
-                       MostProductiveReviewers.Add(review.Reviewer);
+                        mostProductiveReviewers.Add(reviewer);
                     }
-                    else if (MaxAmountOfReview < ReviewCount)
+                    else if (count > maxCount)
                     {
-                        MostProductiveReviewers.Clear();
-                        MostProductiveReviewers.Add(review.Reviewer);
+                        mostProductiveReviewers.Clear();
+                        mostProductiveReviewers.Add(reviewer);
+                        maxCount++;
                     }
                 }
+                else if (review.Reviewer != reviewer)
+                {
+                    count = 1;
+                    reviewer = review.Reviewer;
+                }
             }
-            return MostProductiveReviewers;
+            return mostProductiveReviewers;
         }
 
         public List<int> GetMoviesWithHighestNumberOfTopRates()
@@ -228,7 +243,7 @@ namespace MovieRatingExample.Application
                 }
             }
 
-            Reviews.OrderByDescending(review => review.ReviewDate);
+            Reviews.OrderByDescending(review => review.Grade).ThenBy(review => review.ReviewDate);
             foreach (BEReview review in Reviews)
             {
                 if (review.Grade == sortedGrade)
@@ -251,11 +266,11 @@ namespace MovieRatingExample.Application
 
         public List<int> GetTopRatedMovies(int amount)
         {
-            if (Repository.GetAll().Length == 0)
+            if (Repository.GetAll().Length == 0 || amount <= 0)
                 throw new ArgumentException();
             List<BEReview> sortedReviews = new List<BEReview>();
-            List<int> TopRatedMovies = new List<int>();
-            int Count = 0;
+            List<int> topRatedMovies = new List<int>();
+            int count = 0;
            
             foreach (BEReview review in Repository.GetAll())
             {
@@ -265,13 +280,14 @@ namespace MovieRatingExample.Application
             sortedReviews.OrderByDescending(review => review.Grade);
             foreach (BEReview reviews in sortedReviews)
             {
-                if (Count >= amount)
+                if (count < amount)
                 {
-                    TopRatedMovies.Add(reviews.Movie);
+                    topRatedMovies.Add(reviews.Movie);
+                    count++;
                 }
                 
             }
-            return TopRatedMovies;
+            return topRatedMovies;
         }
     }
 }
