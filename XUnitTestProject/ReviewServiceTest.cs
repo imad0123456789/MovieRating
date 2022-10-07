@@ -323,7 +323,10 @@ namespace XUnitTestProject
             List<int> result = service.GetMoviesWithHighestNumberOfTopRates();
             
             //Assert
-            Assert.Equal(2,result.Count);
+            Assert.Collection(result,
+                item => Assert.Equal(3, item),
+                item => Assert.Equal(4, item)
+            );
             mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
         [Fact]
@@ -444,8 +447,6 @@ namespace XUnitTestProject
                 item => Assert.Equal(2, item),
                 item => Assert.Equal(3, item)
             );
-            //Assert.Equal(2,result.Count);
-            //Assert.Collection();
             mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
         [Fact]
