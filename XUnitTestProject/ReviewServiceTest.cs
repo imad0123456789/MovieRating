@@ -334,21 +334,22 @@ namespace XUnitTestProject
         {
             //Arrange
 
-            BEReview review01 = new BEReview();
-            BEReview review02 = new BEReview();
-            BEReview review03 = new BEReview();
+            BEReview review01 = new BEReview(1,1,1,DateTime.Now);
+            BEReview review02 = new BEReview(1,1,3,DateTime.Now);
+            BEReview review03 = new BEReview(2,2,5,DateTime.Now);
+           
             
+            /*
             review01.Grade = 1;
             review02.Grade = 3;
             review03.Grade = 5;
-
             review01.Movie = 1;
             review02.Movie = 1;
             review03.Movie = 2;
-            
             review01.Reviewer = 1;
             review02.Reviewer = 1;
             review03.Reviewer = 2;
+            */
 
             List<BEReview> reviews = new List<BEReview>();
             
@@ -365,9 +366,10 @@ namespace XUnitTestProject
             List<int> result = service.GetMostProductiveReviewers();
             
             //Assert
-            Assert.Equal(1,result.Count);
+            Assert.True(1 ==result.Count);
             mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
+        
         [Fact]
         public void GetTopRatedMovies()
         {
@@ -400,9 +402,11 @@ namespace XUnitTestProject
             List<int> result = service.GetTopRatedMovies(1);
             
             //Assert
-            Assert.Equal(1,result.Count);
+            Assert.True (1 == result.Count);
+            Assert.Contains(1, result);
             mockRepository.Verify((r) => r.GetAll(), Times.AtLeast(1));
         }
+        
         [Fact]
         public void GetTopMoviesByReviewer()
         {
